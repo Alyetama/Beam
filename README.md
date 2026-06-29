@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/icon.png" alt="Beam icon" width="120"/>
+
 # Beam
 
 **A clean, native macOS remote desktop for your Ubuntu machine.**
