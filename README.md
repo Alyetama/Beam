@@ -6,7 +6,7 @@ A clean, native macOS remote‑desktop client for Ubuntu. It speaks the **VNC
 your mouse and keyboard, optionally tunnelled securely over SSH.
 
 <p align="center">
-  <img src="docs/mockup.png" alt="Beam connected to an Ubuntu desktop" width="840"/>
+  <img src="docs/preview.png" alt="Beam connected to an Ubuntu desktop" width="840"/>
 </p>
 
 <p align="center">
