@@ -1,130 +1,104 @@
+<div align="center">
+
 # Beam
 
-A clean, native macOS remote‑desktop client for Ubuntu. It speaks the **VNC
-(RFB) protocol** directly — implemented from scratch in Swift over
-`Network.framework` — so you see the real Ubuntu desktop and control it with
-your mouse and keyboard, optionally tunnelled securely over SSH.
+**A clean, native macOS remote desktop for your Ubuntu machine.**
 
-<p align="center">
-  <img src="docs/preview.png" alt="Beam connected to an Ubuntu desktop" width="840"/>
-</p>
+<img src="docs/preview.png" alt="Beam connected to an Ubuntu desktop" width="820"/>
 
-<p align="center">
-  <a href="https://github.com/Alyetama/beam/releases/latest/download/Beam.dmg"><b>⬇&nbsp; Download&nbsp;Beam.dmg</b></a>
-  &nbsp;·&nbsp; macOS&nbsp;14+ · Apple&nbsp;Silicon &nbsp;·&nbsp;
-  <a href="https://alyetama.github.io/beam/">Website</a>
-</p>
+[**⬇ Download**](https://github.com/Alyetama/beam/releases/latest/download/Beam.dmg) &nbsp;·&nbsp;
+[Website](https://alyetama.github.io/beam/) &nbsp;·&nbsp; macOS&nbsp;14+ &nbsp;·&nbsp; Apple&nbsp;Silicon
 
-## Installing (first launch)
+</div>
 
-Beam is open source but isn’t signed with a paid Apple Developer ID, so macOS
-Gatekeeper blocks it the first time. This is a **one-time** step:
+---
 
-1. Open `Beam.dmg` and drag **Beam** into your **Applications** folder.
-2. In Applications, **right-click** (or Control-click) **Beam** → choose **Open**.
-3. Click **Open** again in the dialog. macOS remembers your choice from then on.
+A from-scratch **VNC (RFB)** client in Swift over `Network.framework` — see and
+control the real Ubuntu desktop, with native rendering, client-side cursor, full
+keyboard/mouse, and an optional **SSH tunnel**.
 
-If macOS 15 (Sequoia) still blocks it:
+<details>
+<summary><b>Install (first launch)</b></summary>
 
-- Open Beam once, then go to **System Settings → Privacy & Security**, scroll
-  down, and click **Open Anyway** next to “Beam was blocked”; **or**
-- Remove the quarantine flag in Terminal, then open Beam normally:
+<br>
 
-  ```bash
-  xattr -dr com.apple.quarantine /Applications/Beam.app
-  ```
+Beam isn’t signed with a paid Apple Developer ID, so macOS blocks it once. This is a **one-time** step:
 
-## Why VNC (and not screen‑scraping over SSH)
+1. Open `Beam.dmg` and drag **Beam** into **Applications**.
+2. Right-click (Control-click) **Beam** → **Open** → **Open**.
 
-The proper way to mirror and control a Linux desktop is the Remote Framebuffer
-protocol: the server only sends the regions of the screen that change, so it's
-fast and responsive. Because raw VNC is unencrypted, Remote can transparently
-forward the connection through an **SSH tunnel**, giving you VNC's efficiency
-with SSH's security.
+On macOS 15 (Sequoia), if it’s still blocked: **System Settings → Privacy & Security → Open Anyway**, or run:
 
-## Features
+```bash
+xattr -dr com.apple.quarantine /Applications/Beam.app
+```
 
-- **Native rendering** — framebuffer is blitted straight to a `CALayer`; no web
-  views, no embedded clients.
-- **Encodings:** Raw, CopyRect, and Hextile (supported by every common server —
-  x11vnc, TigerVNC, GNOME), plus the DesktopSize pseudo‑encoding for live
-  resolution changes.
-- **Full input:** mouse move / drag, left‑middle‑right buttons, scroll wheel,
-  and a full keyboard with macOS → X11 keysym mapping. Optionally map **⌘ → Ctrl**
-  so Linux shortcuts feel natural.
-- **Secure by default option:** one toggle tunnels everything over SSH
-  (keys, ssh‑agent, identity files, or password via an askpass helper).
-- **VNC authentication** (DES challenge/response) built in.
-- **Saved connections**, a live status/FPS readout, full‑screen mode, and a
-  view‑only mode.
+</details>
 
-## Build & run
+<details>
+<summary><b>Set up the Ubuntu side</b></summary>
+
+<br>
+
+Beam needs a VNC server on your desktop. Run the helper on the Ubuntu machine:
+
+```bash
+./remote-setup.sh            # installs x11vnc, detects display, sets a password
+./remote-setup.sh --service  # or run it as a background service
+```
+
+Then in Beam, add a connection: the machine’s IP or Tailscale name, display `0`, and your VNC password.
+
+> **Wayland:** x11vnc needs Xorg — pick “Ubuntu on Xorg” at the login screen.
+
+</details>
+
+<details>
+<summary><b>Build from source</b></summary>
+
+<br>
 
 Requires macOS 14+ and a Swift toolchain (Xcode 15+).
 
 ```bash
-./scripts/bundle.sh        # builds build/Beam.app
+./scripts/bundle.sh     # builds build/Beam.app
 open build/Beam.app
 ```
 
-Or run straight from SwiftPM during development:
+Or `swift run` during development. `./scripts/make_dmg.sh` packages a `.dmg`.
 
-```bash
-swift run
-```
+</details>
 
-## Setting up the Ubuntu side
+<details>
+<summary><b>How it works</b></summary>
 
-On the Ubuntu machine, run the helper (it installs `x11vnc`, attaches it to your
-real `:0` display, and sets a VNC password):
-
-```bash
-./remote-setup.sh            # prints the command to start the server
-./remote-setup.sh --service  # or install it as a systemd user service
-```
-
-> **Wayland note:** `x11vnc` needs an Xorg session. If you're on Wayland, log out
-> and choose **“Ubuntu on Xorg”** at the login screen, or use GNOME's built‑in
-> Remote Desktop sharing.
-
-Then in the Mac app, create a connection:
-
-| Field            | Value                                   |
-|------------------|-----------------------------------------|
-| Tunnel over SSH  | **On** (recommended)                    |
-| SSH Host / User  | the machine's address + your login      |
-| VNC Host         | `localhost`                             |
-| Display          | `0`  (→ port 5900)                       |
-| VNC Password     | the password set by `remote-setup.sh`   |
-
-For a trusted LAN you can turn the SSH tunnel off and point **VNC Host** straight
-at the machine's IP.
-
-## How it works
+<br>
 
 ```
-┌────────────── macOS app ──────────────┐        ┌──────── Ubuntu ────────┐
-│ SwiftUI UI                             │        │                        │
-│   └ RFBClient (Network.framework)      │  RFB   │  x11vnc ⇄ X11 :0       │
-│       ├ handshake + VNC auth (DES)     │◀──────▶│  (the real desktop)    │
-│       ├ Raw / CopyRect / Hextile decode│ over   │                        │
-│       ├ Framebuffer → CGImage          │ SSH ▲  │                        │
-│       └ Pointer / Key events           │     │  └────────────────────────┘
-│   └ SSHTunnel (ssh -L, optional) ──────┼─────┘
-└────────────────────────────────────────┘
+macOS app (SwiftUI)                         Ubuntu
+  RFBClient — Network.framework  ──RFB──▶   x11vnc ⇄ X11 :0
+    handshake · VNC auth · decode  (over     (the real desktop)
+    framebuffer · pointer/keys     SSH ▲)
+  SSHTunnel (ssh -L, optional) ────────┘
 ```
 
-Source layout (`Sources/Remote/`):
+Source (`Sources/Remote/`): `VNC/` (protocol core — `RFBClient`, `Framebuffer`,
+`VNCAuth`, `ByteChannel`, `SSHTunnel`), `Models/`, `Views/`.
 
-- `VNC/` — the protocol core: `ByteChannel` (async socket reader), `RFBClient`
-  (state machine + decoders + input), `Framebuffer`, `VNCAuth`, `Keysyms`,
-  `SSHTunnel`.
-- `Models/` — `Connection` profiles + JSON persistence.
-- `Views/` — SwiftUI shell (sidebar, editor, live session, AppKit input surface).
+</details>
 
-## Limitations / roadmap
+<details>
+<summary><b>Security & limitations</b></summary>
 
-- No Tight/ZRLE yet — Hextile keeps bandwidth reasonable on a LAN but those
-  encodings would help over slower links.
-- No clipboard sync or file transfer.
-- No TLS‑based VNC (use the SSH tunnel instead).
+<br>
+
+- Saved credentials live in `~/Library/Application Support/Remote/connections.json`, `chmod 600` (Keychain is on the roadmap).
+- SSH host keys use trust-on-first-use; VNC has no TLS — use the SSH tunnel (or Tailscale).
+- Ad-hoc signed, not notarized (hence the install step above).
+- No Tight/ZRLE encoding or clipboard sync yet.
+
+</details>
+
+---
+
+<div align="center"><sub>Made with Swift · not affiliated with Canonical or Ubuntu</sub></div>
