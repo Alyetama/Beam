@@ -1,0 +1,143 @@
+<svg viewBox="0 0 1280 800" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <linearGradient id="backdrop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef0fb"/>
+      <stop offset="1" stop-color="#dfe3f5"/>
+    </linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5664f6"/>
+      <stop offset="0.5" stop-color="#7a46e0"/>
+      <stop offset="1" stop-color="#e85fa0"/>
+    </linearGradient>
+    <linearGradient id="titlebar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#26262c"/>
+      <stop offset="1" stop-color="#1d1d22"/>
+    </linearGradient>
+    <clipPath id="winClip"><rect x="24" y="20" width="1232" height="752" rx="16"/></clipPath>
+    <filter id="winShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="22" stdDeviation="30" flood-color="#1a1c3a" flood-opacity="0.28"/>
+    </filter>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#120b2e" flood-opacity="0.35"/>
+    </filter>
+    <filter id="blurBlob" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+  </defs>
+
+  <!-- backdrop -->
+  <rect width="1280" height="800" fill="url(#backdrop)"/>
+
+  <!-- app window -->
+  <rect x="24" y="20" width="1232" height="752" rx="16" fill="#101014" filter="url(#winShadow)"/>
+
+  <g clip-path="url(#winClip)">
+    <!-- remote desktop wallpaper -->
+    <rect x="24" y="64" width="1232" height="708" fill="url(#wall)"/>
+    <g filter="url(#blurBlob)" opacity="0.55">
+      <circle cx="240" cy="240" r="150" fill="#8ea2ff"/>
+      <circle cx="1080" cy="200" r="170" fill="#ff8fc6"/>
+      <circle cx="900" cy="640" r="190" fill="#6a4ce0"/>
+      <circle cx="360" cy="700" r="140" fill="#ffd1a8"/>
+    </g>
+
+    <!-- GNOME top bar -->
+    <rect x="24" y="64" width="1232" height="28" fill="#000000" opacity="0.30"/>
+    <text x="48" y="83" fill="#ffffff" font-size="13" font-weight="600" opacity="0.92">Activities</text>
+    <text x="640" y="83" fill="#ffffff" font-size="13" font-weight="600" text-anchor="middle" opacity="0.92">Mon  09:41</text>
+    <g fill="#ffffff" opacity="0.9">
+      <rect x="1176" y="73" width="14" height="10" rx="2"/>
+      <circle cx="1205" cy="78" r="6"/>
+      <rect x="1218" y="72" width="20" height="12" rx="3"/>
+    </g>
+
+    <!-- terminal window -->
+    <g filter="url(#softShadow)">
+      <rect x="150" y="210" width="620" height="380" rx="11" fill="#17171b"/>
+      <rect x="150" y="210" width="620" height="34" rx="11" fill="#2a2a31"/>
+      <rect x="150" y="232" width="620" height="12" fill="#2a2a31"/>
+      <circle cx="172" cy="227" r="6" fill="#ff5f57"/>
+      <circle cx="192" cy="227" r="6" fill="#febc2e"/>
+      <circle cx="212" cy="227" r="6" fill="#28c840"/>
+      <text x="460" y="231" fill="#9a9aa3" font-size="12.5" text-anchor="middle" font-family="monospace">biodiv@ubuntu: ~</text>
+    </g>
+    <g font-family="monospace" font-size="15">
+      <text x="174" y="288"><tspan fill="#36d399">biodiv@ubuntu</tspan><tspan fill="#cfd0d6">:</tspan><tspan fill="#5b9bf3">~</tspan><tspan fill="#cfd0d6">$ ./train.py --epochs 50</tspan></text>
+      <text x="174" y="318" fill="#c8c9d0">Epoch 12/50   loss 0.214   acc 0.931</text>
+      <text x="174" y="348" fill="#c8c9d0">Epoch 13/50   loss 0.198   acc 0.940</text>
+      <text x="174" y="378"><tspan fill="#36d399">✔</tspan><tspan fill="#c8c9d0"> checkpoint saved → runs/exp12</tspan></text>
+      <text x="174" y="408"><tspan fill="#36d399">biodiv@ubuntu</tspan><tspan fill="#cfd0d6">:</tspan><tspan fill="#5b9bf3">~</tspan><tspan fill="#cfd0d6">$ </tspan><tspan fill="#e6e6ea">htop</tspan></text>
+      <text x="174" y="446" fill="#7fe3b0">CPU [||||||||||||||||||      ] 71%</text>
+      <text x="174" y="470" fill="#9b8cf0">Mem [|||||||||||             ] 44%</text>
+      <text x="174" y="510" fill="#e6e6ea">  PID  USER     %CPU  COMMAND</text>
+      <text x="174" y="534" fill="#c8c9d0"> 3041  biodiv    71.0  python train.py</text>
+      <text x="174" y="558" fill="#c8c9d0"> 1188  biodiv     2.3  gnome-shell</text>
+    </g>
+
+    <!-- editor / files window -->
+    <g filter="url(#softShadow)">
+      <rect x="812" y="150" width="392" height="300" rx="11" fill="#ffffff"/>
+      <rect x="812" y="150" width="392" height="34" rx="11" fill="#ededf1"/>
+      <rect x="812" y="172" width="392" height="12" fill="#ededf1"/>
+      <circle cx="834" cy="167" r="6" fill="#ff5f57"/>
+      <circle cx="854" cy="167" r="6" fill="#febc2e"/>
+      <circle cx="874" cy="167" r="6" fill="#28c840"/>
+      <text x="1008" y="171" fill="#8a8a93" font-size="12.5" text-anchor="middle">Text Editor</text>
+      <rect x="812" y="184" width="120" height="266" fill="#f6f6f9"/>
+      <g fill="#c7c8d4">
+        <rect x="828" y="206" width="88" height="9" rx="4"/>
+        <rect x="828" y="228" width="70" height="9" rx="4"/>
+        <rect x="828" y="250" width="80" height="9" rx="4"/>
+        <rect x="828" y="272" width="62" height="9" rx="4"/>
+      </g>
+      <g>
+        <rect x="952" y="208" width="150" height="10" rx="5" fill="#7a46e0"/>
+        <rect x="952" y="232" width="220" height="10" rx="5" fill="#d9dae6"/>
+        <rect x="952" y="256" width="190" height="10" rx="5" fill="#d9dae6"/>
+        <rect x="952" y="280" width="210" height="10" rx="5" fill="#d9dae6"/>
+        <rect x="952" y="304" width="140" height="10" rx="5" fill="#56c08d"/>
+        <rect x="952" y="328" width="200" height="10" rx="5" fill="#d9dae6"/>
+        <rect x="952" y="352" width="170" height="10" rx="5" fill="#d9dae6"/>
+        <rect x="952" y="376" width="120" height="10" rx="5" fill="#e8a6c4"/>
+      </g>
+    </g>
+
+    <!-- dock -->
+    <g filter="url(#softShadow)">
+      <rect x="392" y="694" width="496" height="60" rx="18" fill="#ffffff" opacity="0.16"/>
+      <rect x="392" y="694" width="496" height="60" rx="18" fill="none" stroke="#ffffff" stroke-opacity="0.25"/>
+    </g>
+    <g>
+      <rect x="408" y="704" width="40" height="40" rx="11" fill="#e9572b"/>
+      <rect x="462" y="704" width="40" height="40" rx="11" fill="#2d8cf0"/>
+      <rect x="516" y="704" width="40" height="40" rx="11" fill="#17171b"/>
+      <rect x="570" y="704" width="40" height="40" rx="11" fill="#9b59b6"/>
+      <rect x="624" y="704" width="40" height="40" rx="11" fill="#e84c8a"/>
+      <rect x="678" y="704" width="40" height="40" rx="11" fill="#2bb673"/>
+      <rect x="732" y="704" width="40" height="40" rx="11" fill="#f2a73b"/>
+      <rect x="786" y="704" width="40" height="40" rx="11" fill="#5664f6"/>
+      <rect x="840" y="704" width="40" height="40" rx="11" fill="#ffffff" opacity="0.85"/>
+    </g>
+
+    <!-- remote cursor -->
+    <g transform="translate(556,392)" filter="url(#softShadow)">
+      <path d="M0,0 L0,22 L5.5,16.5 L9.6,24.7 L12.4,23.4 L8.2,15.1 L15.1,15.1 Z"
+            fill="#ffffff" stroke="#1a1a22" stroke-width="1.2" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- app title bar (chrome) on top -->
+  <g clip-path="url(#winClip)">
+    <rect x="24" y="20" width="1232" height="44" fill="url(#titlebar)"/>
+    <circle cx="48" cy="42" r="6" fill="#ff5f57"/>
+    <circle cx="68" cy="42" r="6" fill="#febc2e"/>
+    <circle cx="88" cy="42" r="6" fill="#28c840"/>
+    <text x="116" y="47" fill="#ffffff" font-size="14.5" font-weight="700">Beam</text>
+    <rect x="170" y="32" width="98" height="20" rx="10" fill="#2e2e36"/>
+    <circle cx="184" cy="42" r="4" fill="#28c840"/>
+    <text x="196" y="46" fill="#cfd0d6" font-size="11.5" font-weight="600">Connected</text>
+    <text x="1010" y="46" fill="#9a9aa5" font-size="12" text-anchor="end" font-family="monospace">1920 × 1080  ·  60 fps</text>
+    <rect x="1146" y="30" width="92" height="24" rx="7" fill="#d65c5c"/>
+    <text x="1192" y="46" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">Disconnect</text>
+  </g>
+</svg>

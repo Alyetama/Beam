@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Beam — native remote desktop for Ubuntu</title>
+<meta name="description" content="Beam is a clean, native macOS remote-desktop client for Ubuntu. A from-scratch VNC client in Swift, optionally tunnelled over SSH."/>
+<link rel="icon" href="favicon.png"/>
+<style>
+  :root{
+    --indigo:#6a6cf7; --indigo-deep:#4a40d4; --violet:#7a46e0;
+    --bg:#0d0d14; --bg2:#13121d; --card:#1a1a26; --line:#2a2a3a;
+    --text:#ececf3; --muted:#a3a3b6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #221d4a 0%, var(--bg) 55%);
+    color:var(--text); line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+  .brand img{width:30px;height:30px;border-radius:8px}
+  .nav a.gh{color:var(--muted);font-size:14px;font-weight:600}
+  .nav a.gh:hover{color:var(--text)}
+
+  .hero{text-align:center;padding:54px 0 10px}
+  .hero img.logo{width:96px;height:96px;border-radius:24px;box-shadow:0 18px 50px rgba(74,64,212,.45)}
+  .hero h1{font-size:54px;letter-spacing:-1.5px;margin:22px 0 6px;font-weight:800}
+  .hero p.tag{font-size:20px;color:var(--muted);max-width:620px;margin:0 auto}
+  .badges{margin-top:14px;color:var(--muted);font-size:13.5px}
+  .badges b{color:var(--text);font-weight:600}
+
+  .cta{display:flex;gap:14px;justify-content:center;margin:30px 0 8px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:13px;font-weight:600;font-size:15px;cursor:pointer;border:1px solid transparent;transition:.15s}
+  .btn-primary{background:linear-gradient(180deg,var(--indigo),var(--indigo-deep));color:#fff;box-shadow:0 10px 30px rgba(74,64,212,.4)}
+  .btn-primary:hover{transform:translateY(-1px)}
+  .btn-ghost{background:#ffffff10;border-color:var(--line);color:var(--text)}
+  .btn-ghost:hover{background:#ffffff18}
+  .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+  .shot{margin:40px 0 10px}
+  .shot img{width:100%;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.5);border:1px solid var(--line)}
+
+  /* install callout */
+  #install{scroll-margin-top:20px;margin:26px auto 0;max-width:760px;display:none}
+  #install.show{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .callout{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px}
+  .callout h3{font-size:18px;margin-bottom:6px}
+  .callout .why{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .step{display:flex;gap:12px;margin:10px 0}
+  .step .n{flex:0 0 24px;height:24px;border-radius:7px;background:#ffffff12;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--indigo)}
+  .step div{font-size:14.5px}
+  kbd{background:#ffffff14;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12.5px}
+  pre{background:#0b0b12;border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow:auto;margin:12px 0 4px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#d7d8ff}
+  .or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:18px 0 8px;text-transform:uppercase;letter-spacing:1px}
+  .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .section{padding:54px 0 10px}
+  .section h2{text-align:center;font-size:30px;letter-spacing:-.5px;margin-bottom:8px}
+  .section p.lead{text-align:center;color:var(--muted);max-width:640px;margin:0 auto 30px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}.hero h1{font-size:42px}}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .feat .ico{width:38px;height:38px;border-radius:10px;background:linear-gradient(180deg,var(--indigo),var(--violet));display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:12px}
+  .feat h4{font-size:15.5px;margin-bottom:5px}
+  .feat p{font-size:13.5px;color:var(--muted)}
+
+  .setup{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;max-width:760px;margin:0 auto}
+  .setup ol{margin-left:18px}
+  .setup li{margin:8px 0;font-size:14.5px}
+
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:50px 0 40px}
+  footer a{color:var(--indigo);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav">
+    <div class="brand"><img src="icon.png" alt="Beam"/> Beam</div>
+    <a class="gh" href="https://github.com/Alyetama/beam">View on GitHub ↗</a>
+  </nav>
+
+  <header class="hero">
+    <img class="logo" src="icon.png" alt="Beam icon"/>
+    <h1>Beam</h1>
+    <p class="tag">A clean, native macOS remote desktop for your Ubuntu machine.</p>
+    <div class="badges"><b>Free</b> &nbsp;·&nbsp; <b>Open source</b> &nbsp;·&nbsp; macOS&nbsp;14+ &nbsp;·&nbsp; Apple&nbsp;Silicon</div>
+
+    <div class="cta">
+      <a class="btn btn-primary" id="dl"
+         href="https://github.com/Alyetama/beam/releases/latest/download/Beam.dmg"
+         onclick="showInstall()">⬇ Download for macOS</a>
+      <a class="btn btn-ghost" href="https://github.com/Alyetama/beam">★ Star on GitHub</a>
+    </div>
+    <div class="sub">Downloads the latest <code>.dmg</code> · ~1&nbsp;MB</div>
+  </header>
+
+  <!-- install instructions, revealed on download -->
+  <section id="install">
+    <div class="callout">
+      <h3>👋 Opening Beam the first time</h3>
+      <p class="why">Beam is open source but isn’t signed with a paid Apple Developer ID, so macOS Gatekeeper blocks it on first launch. This is a one-time step — here’s how to allow it.</p>
+
+      <div class="step"><div class="n">1</div><div>Open the downloaded <code>Beam.dmg</code> and drag <b>Beam</b> into your <b>Applications</b> folder.</div></div>
+      <div class="step"><div class="n">2</div><div>In Applications, <b>right-click</b> (or Control-click) <b>Beam</b> → choose <b>Open</b>.</div></div>
+      <div class="step"><div class="n">3</div><div>In the dialog that appears, click <b>Open</b> again. Done — it won’t ask again.</div></div>
+
+      <div class="or">If that’s blocked (macOS Sequoia)</div>
+      <div class="step"><div class="n">A</div><div>Try to open Beam once, then go to <b>System Settings → Privacy &amp; Security</b>, scroll down, and click <b>Open Anyway</b> next to “Beam was blocked”.</div></div>
+      <div class="step"><div class="n">B</div><div>Or remove the quarantine flag in Terminal, then open Beam normally:</div></div>
+      <pre><code>xattr -dr com.apple.quarantine /Applications/Beam.app</code></pre>
+    </div>
+  </section>
+
+  <div class="shot"><img src="mockup.svg" alt="Beam connected to an Ubuntu desktop"/></div>
+
+  <section class="section">
+    <h2>Built like a real remote desktop</h2>
+    <p class="lead">Beam speaks the VNC (RFB) protocol directly — a from-scratch client in Swift over Network.framework. No web views, no bundled clients.</p>
+    <div class="grid">
+      <div class="feat"><div class="ico">🖥️</div><h4>Native rendering</h4><p>The framebuffer is blitted straight to a CALayer with client-side cursor for zero-lag pointer feedback.</p></div>
+      <div class="feat"><div class="ico">🔒</div><h4>Secure over SSH</h4><p>One toggle tunnels the whole session through SSH — keys, ssh-agent, or password. Or go direct over Tailscale.</p></div>
+      <div class="feat"><div class="ico">⌨️</div><h4>Full input</h4><p>Mouse, drag, scroll, and a complete keyboard with macOS→X11 keysym mapping. Map ⌘→Ctrl for Linux shortcuts.</p></div>
+      <div class="feat"><div class="ico">⚡</div><h4>Efficient encodings</h4><p>Raw, CopyRect and Hextile with incremental updates and TCP no-delay for a responsive feel.</p></div>
+      <div class="feat"><div class="ico">📇</div><h4>Saved connections</h4><p>A tidy sidebar of machines that auto-collapses on connect, with live status and FPS.</p></div>
+      <div class="feat"><div class="ico">🍎</div><h4>Properly native</h4><p>SwiftUI + AppKit. Sidebar, full-screen, view-only mode — it feels like a Mac app because it is one.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Set up the Ubuntu side</h2>
+    <p class="lead">Beam needs a VNC server attached to your real desktop. The helper script does it for you.</p>
+    <div class="setup">
+      <ol>
+        <li>Copy <code>remote-setup.sh</code> to the Ubuntu machine and run it — it installs <code>x11vnc</code>, auto-detects your display, and sets a VNC password.</li>
+        <li><code>./remote-setup.sh --service</code> installs it as a background service.</li>
+        <li>In Beam: add a connection with the machine’s IP (or Tailscale name), display <code>0</code>, and your VNC password. Connect.</li>
+      </ol>
+      <p style="color:var(--muted);font-size:13px;margin-top:14px">Wayland note: x11vnc needs an Xorg session — pick “Ubuntu on Xorg” at the login screen.</p>
+    </div>
+  </section>
+</div>
+
+<footer>
+  Made with Swift · <a href="https://github.com/Alyetama/beam">github.com/Alyetama/beam</a><br/>
+  Not affiliated with Canonical or Ubuntu.
+</footer>
+
+<script>
+  function showInstall(){
+    var el = document.getElementById('install');
+    el.classList.add('show');
+    setTimeout(function(){ el.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+  }
+</script>
+</body>
+</html>
