@@ -32,7 +32,7 @@ Beam isn’t signed with a paid Apple Developer ID, so macOS blocks it once. Thi
 On macOS 15 (Sequoia), if it’s still blocked: **System Settings → Privacy & Security → Open Anyway**, or run:
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/Beam.app
+/usr/bin/xattr -dr com.apple.quarantine /Applications/Beam.app
 ```
 
 </details>

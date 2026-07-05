@@ -113,7 +113,7 @@
       <div class="or">If that’s blocked (macOS Sequoia)</div>
       <div class="step"><div class="n">A</div><div>Try to open Beam once, then go to <b>System Settings → Privacy &amp; Security</b>, scroll down, and click <b>Open Anyway</b> next to “Beam was blocked”.</div></div>
       <div class="step"><div class="n">B</div><div>Or remove the quarantine flag in Terminal, then open Beam normally:</div></div>
-      <pre><code>xattr -dr com.apple.quarantine /Applications/Beam.app</code></pre>
+      <pre><code>/usr/bin/xattr -dr com.apple.quarantine /Applications/Beam.app</code></pre>
     </div>
   </section>
 

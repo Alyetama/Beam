@@ -21,7 +21,7 @@ If macOS 15 (Sequoia) still blocks it:
 - Remove the quarantine flag in Terminal, then open Beam normally:
 
   ```bash
-  xattr -dr com.apple.quarantine /Applications/Beam.app
+  /usr/bin/xattr -dr com.apple.quarantine /Applications/Beam.app
   ```
 
 ---
