@@ -16,7 +16,7 @@ APP="$PWD/build/Beam.app"
 
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-cp "$BIN_PATH/Remote" "$APP/Contents/MacOS/Remote"
+cp "$BIN_PATH/Beam" "$APP/Contents/MacOS/Beam"
 cp scripts/Info.plist "$APP/Contents/Info.plist"
 if [ -f scripts/AppIcon.icns ]; then
     cp scripts/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"

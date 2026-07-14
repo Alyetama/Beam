@@ -89,7 +89,13 @@ final class RFBClient: ObservableObject {
         } catch is CancellationError {
             setState(.disconnected)
         } catch {
-            setState(.failed(error.localizedDescription))
+            // A cancel (user disconnect) closes the socket, which surfaces here
+            // as a read error — treat that as a clean disconnect, not a failure.
+            if Task.isCancelled {
+                setState(.disconnected)
+            } else {
+                setState(.failed(error.localizedDescription))
+            }
             channel?.close()
             tunnel?.stop()
         }

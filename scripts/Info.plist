@@ -9,7 +9,7 @@
     <key>CFBundleIdentifier</key>
     <string>com.fcatus.beam</string>
     <key>CFBundleExecutable</key>
-    <string>Remote</string>
+    <string>Beam</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>CFBundlePackageType</key>

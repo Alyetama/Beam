@@ -9,11 +9,17 @@ final class ConnectionStore: ObservableObject {
     private let fileURL: URL
 
     init() {
-        let base = FileManager.default
+        let support = FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("Remote", isDirectory: true)
+        let base = support.appendingPathComponent("Beam", isDirectory: true)
         try? FileManager.default.createDirectory(at: base, withIntermediateDirectories: true)
         fileURL = base.appendingPathComponent("connections.json")
+        // Migrate connections saved under the old "Remote" name.
+        let legacy = support.appendingPathComponent("Remote/connections.json")
+        if !FileManager.default.fileExists(atPath: fileURL.path),
+           FileManager.default.fileExists(atPath: legacy.path) {
+            try? FileManager.default.copyItem(at: legacy, to: fileURL)
+        }
         load()
     }
 

@@ -30,4 +30,4 @@ If macOS 15 (Sequoia) still blocks it:
 
 Run `remote-setup.sh` on the Ubuntu machine to install `x11vnc`, then add a
 connection in Beam (machine IP / Tailscale name, display `0`, your VNC password).
-See the [README](https://github.com/Alyetama/beam#readme) for details.
+See the [README](https://github.com/Alyetama/Beam#readme) for details.

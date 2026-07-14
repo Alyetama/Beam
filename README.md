@@ -8,8 +8,8 @@
 
 <img src="docs/preview.png" alt="Beam connected to an Ubuntu desktop" width="820"/>
 
-[**⬇ Download**](https://github.com/Alyetama/beam/releases/latest/download/Beam.dmg) &nbsp;·&nbsp;
-[Website](https://alyetama.github.io/beam/) &nbsp;·&nbsp; macOS&nbsp;14+ &nbsp;·&nbsp; Apple&nbsp;Silicon
+[**⬇ Download**](https://github.com/Alyetama/Beam/releases/latest/download/Beam.dmg) &nbsp;·&nbsp;
+[Website](https://alyetama.github.io/Beam/) &nbsp;·&nbsp; macOS&nbsp;14+ &nbsp;·&nbsp; Apple&nbsp;Silicon
 
 </div>
 

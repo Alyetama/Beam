@@ -70,6 +70,7 @@ final class SSHTunnel {
         process?.terminate()
         process = nil
         if let url = askpassURL { try? FileManager.default.removeItem(at: url) }
+        unsetenv("REMOTE_SSH_PW")
     }
 
     private func makeAskpass(password: String) throws -> URL {
