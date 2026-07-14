@@ -15,21 +15,22 @@
 
 ---
 
-A from-scratch **VNC (RFB)** client in Swift over `Network.framework` — see and
-control the real Ubuntu desktop, with native rendering, client-side cursor, full
-keyboard/mouse, and an optional **SSH tunnel**.
+Beam talks **VNC (RFB)** directly — a client written from scratch in Swift on
+`Network.framework`. You get the real Ubuntu desktop with mouse and keyboard, and its
+own cursor drawn locally so the pointer keeps up. VNC is unencrypted, so there's a
+one-toggle **SSH tunnel** for when you're not on a trusted network.
 
 <details>
 <summary><b>Install (first launch)</b></summary>
 
 <br>
 
-Beam isn’t signed with a paid Apple Developer ID, so macOS blocks it once. This is a **one-time** step:
+Beam isn't signed with a paid Apple Developer ID (I don't have one), so macOS blocks it the first time. One-time step:
 
 1. Open `Beam.dmg` and drag **Beam** into **Applications**.
 2. Right-click (Control-click) **Beam** → **Open** → **Open**.
 
-On macOS 15 (Sequoia), if it’s still blocked: **System Settings → Privacy & Security → Open Anyway**, or run:
+On macOS 15 (Sequoia), if it's still blocked: **System Settings → Privacy & Security → Open Anyway**, or run:
 
 ```bash
 /usr/bin/xattr -dr com.apple.quarantine /Applications/Beam.app
@@ -49,9 +50,9 @@ Beam needs a VNC server on your desktop. Run the helper on the Ubuntu machine:
 ./remote-setup.sh --service  # or run it as a background service
 ```
 
-Then in Beam, add a connection: the machine’s IP or Tailscale name, display `0`, and your VNC password.
+Then in Beam, add a connection: the machine's IP or Tailscale name, display `0`, and your VNC password.
 
-> **Wayland:** x11vnc needs Xorg — pick “Ubuntu on Xorg” at the login screen.
+> **Wayland:** x11vnc needs Xorg — pick "Ubuntu on Xorg" at the login screen.
 
 </details>
 
